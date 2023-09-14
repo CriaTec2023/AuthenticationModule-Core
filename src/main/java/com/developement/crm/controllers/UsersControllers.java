@@ -41,17 +41,7 @@ public class UsersControllers {
             return ResponseEntity.badRequest().body("Invalid username or password");
         }
     }
-//    public ResponseEntity<?> login(@RequestBody @Valid UserLoginDto data){
-//        try {
-//            String token = usersService.login(data.getLogin(), data.getPassword());
-//            if(token == null) {
-//                return ResponseEntity.badRequest().body("Invalid username or password");
-//            }
-//            return ResponseEntity.ok(token);
-//        } catch (UserNotFoundException e) {
-//            return ResponseEntity.badRequest().body("Invalid username or password");
-//        }
-//    }
+
 
     @PostMapping("/newUsers")
     public ResponseEntity<UsersDto> create(@RequestBody @Valid UsersDto user){

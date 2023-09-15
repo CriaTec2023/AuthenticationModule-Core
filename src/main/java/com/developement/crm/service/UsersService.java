@@ -17,12 +17,16 @@ public class UsersService {
     @Autowired
     private UsersRepository userRepository;
 
+    @Autowired
+    private TokenService tokenService;
+
 
     public UserModel creatNewUser(UserModel user) {
         if(user.getId() != null && userRepository.findUserModelByLogin(user.getLogin()).isPresent()) {
             return user;
         } else {
-            user.generateToken();
+            String token =tokenService.generateToken(user);
+            user.setToken(token);
             userRepository.save(user);
             return user;
         }
@@ -39,6 +43,19 @@ public class UsersService {
             }else {
                 throw new UserNotFoundException("Usuario com senha incorreta");
             }
+        }else {
+            throw new UserNotFoundException("Email não encontrado com o login: " + login);
+        }
+    }
+
+    public UserModel findUserByLogin(String login){
+        Optional<UserModel> loginFindUser = userRepository.findUserModelByLogin(login);
+        Optional<UserModel> emailFindUser = userRepository.findUserModelByEmail(login);
+
+        if(loginFindUser.isPresent()) {
+            return loginFindUser.get();
+        }else if(emailFindUser.isPresent()) {
+            return emailFindUser.get();
         }else {
             throw new UserNotFoundException("Email não encontrado com o login: " + login);
         }

@@ -37,6 +37,7 @@ public class UserModel implements UserDetails {
     private LocalDateTime creationDate;
     private LocalDateTime dataAtualizacao;
     private LocalDateTime acesso;
+    @Enumerated(EnumType.STRING)
     private Roles role;
 
     public UserModel(String login, String password, String name, Unidades unidade) {
@@ -53,10 +54,6 @@ public class UserModel implements UserDetails {
     }
 
 
-    public void generateToken() {
-        this.token = UUID.randomUUID().toString();
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return (this.role == Roles.ADMIN)?
@@ -66,7 +63,7 @@ public class UserModel implements UserDetails {
 
     @Override
     public String getUsername() {
-        return login;
+        return this.login;
     }
 
     @Override

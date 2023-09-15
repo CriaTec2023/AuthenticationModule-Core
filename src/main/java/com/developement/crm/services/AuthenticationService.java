@@ -1,4 +1,4 @@
-package com.developement.crm.service;
+package com.developement.crm.services;
 
 import com.developement.crm.exceptionHandlers.NoUserFindOnSession;
 import com.developement.crm.model.UserModel;

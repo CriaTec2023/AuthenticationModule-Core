@@ -4,30 +4,27 @@ import com.developement.crm.dtos.MessageDto;
 import com.developement.crm.dtos.ResponseLoginDto;
 import com.developement.crm.dtos.UserLoginDto;
 import com.developement.crm.dtos.UsersDto;
-import com.developement.crm.exceptionHandlers.UserNotFoundException;
 import com.developement.crm.model.UserModel;
 import com.developement.crm.repositories.UsersRepository;
-import com.developement.crm.service.TokenService;
-import com.developement.crm.service.UsersService;
+import com.developement.crm.services.TokenService;
+import com.developement.crm.services.UsersService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
 
 @RestController
-@RequestMapping("/auth")
+@CrossOrigin(origins = "*")
+@RequestMapping("auth")
 public class AuthenticationUsersController {
 
     @Autowired
@@ -39,8 +36,7 @@ public class AuthenticationUsersController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private PasswordEncoder bCryptPasswordEncoder;
+
 
     @Autowired
     UsersRepository usersRepository;
@@ -56,8 +52,8 @@ public class AuthenticationUsersController {
             String message = "Usario logado com sucesso";
             return ResponseEntity.ok().body(new ResponseLoginDto(token, message));
 
-        } catch (UserNotFoundException e) {
-            MessageDto message = new MessageDto("Invalid username or password");
+        } catch (BadCredentialsException e) {
+            MessageDto message = new MessageDto("Invalid username or password"+e);
 //            mensagem.put("mensagem", "Invalid username or password"+ e.getMessage());
             return ResponseEntity.badRequest().body(message);
         }
@@ -73,7 +69,7 @@ public class AuthenticationUsersController {
                 mensagem.put("mensagem", "login já castrato");
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(mensagem);
             }else {
-                user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+                user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
                 usersService.creatNewUser(UsersDto.convertToUserModel(user));
 
                 mensagem.put("mensagem", "usuario cadastrado com sucesso");
@@ -85,5 +81,4 @@ public class AuthenticationUsersController {
         }
 
     }
-
 }

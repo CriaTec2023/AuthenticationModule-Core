@@ -23,7 +23,6 @@ import java.util.HashMap;
 
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("auth")
 public class AuthenticationUsersController {
 
@@ -49,13 +48,13 @@ public class AuthenticationUsersController {
             var authentication = authenticationManager.authenticate(userNamePassword);
 
             var token = tokenService.generateToken((UserModel) authentication.getPrincipal());
-            String message = "Usario logado com sucesso";
+            String message = "Usuário logado com sucesso";
             return ResponseEntity.ok().body(new ResponseLoginDto(token, message));
 
         } catch (BadCredentialsException e) {
-            MessageDto message = new MessageDto("Invalid username or password"+e);
-//            mensagem.put("mensagem", "Invalid username or password"+ e.getMessage());
-            return ResponseEntity.badRequest().body(message);
+            String message = "Dados de usuário inválidos";
+            var token = "";
+            return ResponseEntity.badRequest().body(new ResponseLoginDto(token, message));
         }
     }
 

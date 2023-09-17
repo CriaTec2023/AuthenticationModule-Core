@@ -52,6 +52,9 @@ public class UserModel implements UserDetails {
         this.password = password;
         this.role = role;
     }
+    public String getRoleString(){
+        return this.role.toString();
+    }
 
 
     @Override

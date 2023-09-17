@@ -1,5 +1,6 @@
 package com.developement.crm.dtos;
 
+import com.developement.crm.enums.Roles;
 import com.developement.crm.enums.Unidades;
 import com.developement.crm.model.UserModel;
 import jakarta.validation.constraints.Email;
@@ -24,6 +25,8 @@ public class UsersDto {
     private String password;
     private String name;
     private Unidades unidade;
+    @NotBlank
+    private Roles role;
 
 
 

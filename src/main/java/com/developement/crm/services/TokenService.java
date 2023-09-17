@@ -26,6 +26,7 @@ public class TokenService {
                     .withIssuer("CRM")
                     .withSubject(user.getId())
                     .withExpiresAt(expireToken())
+                    .withClaim("roles", user.getRoleString())
                     .sign(algorithm);
             return token;
         }catch (JWTCreationException exception){

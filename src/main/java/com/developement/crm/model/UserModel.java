@@ -33,6 +33,7 @@ public class UserModel implements UserDetails {
     private String email;
     private String name;
     private String token;
+    @Enumerated(EnumType.STRING)
     private Unidades unidade;
     private LocalDateTime creationDate;
     private LocalDateTime dataAtualizacao;

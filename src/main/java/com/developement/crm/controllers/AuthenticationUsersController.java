@@ -9,6 +9,7 @@ import com.developement.crm.repositories.UsersRepository;
 import com.developement.crm.services.TokenService;
 import com.developement.crm.services.UsersService;
 import jakarta.validation.Valid;
+import org.apache.catalina.LifecycleState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 
 @RestController
@@ -35,12 +37,33 @@ public class AuthenticationUsersController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-
-
     @Autowired
     UsersRepository usersRepository;
 
+    @GetMapping("/make")
+    public String makeChanges(){
 
+        try{
+            List<UserModel> users = usersRepository.findAll();
+
+            for(UserModel user : users){
+                String oldPassword = user.getPassword();
+                String newPassword = new BCryptPasswordEncoder().encode(oldPassword);
+
+                String token = tokenService.generateToken(user);
+
+                user.setToken(token);
+                user.setPassword(newPassword);
+
+                usersRepository.save(user);
+            }
+            return "feito com sucesso";
+
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
+
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid UserLoginDto data){

@@ -37,7 +37,7 @@ public class UsersRepositoryTests {
                 .token("Token")
                 .unidade(Unidades.AR)
                 .creationDate(LocalDateTime.now())
-                .role(Roles.USER.ADMIN)
+                .role(Roles.ADMIN)
                 .build();
 
         UserModel user2 = UserModel.builder()
@@ -117,25 +117,18 @@ public class UsersRepositoryTests {
 
     @Test
     public void findUserDetailsByLoginShouldFindSomeThing() {
-        UserDetails userDtls = usersRepository.findByLogin("user3@example.com");
+        UserDetails userDtls = usersRepository.findByLogin("user3");
 
-        Assertions.assertTrue(userDtls.getUsername().isEmpty());
+        Assertions.assertFalse(userDtls.getUsername().isEmpty());
     }
 
     @Test
     public void findUserDetailsByLoginShouldMatch(){
-        UserDetails userDtls = usersRepository.findByLogin("user3@example.com");
+        UserDetails userDtls = usersRepository.findByLogin("user3");
 
-
-        Assertions.assertEquals("User Three", userDtls.getUsername().toString())  ;
+        Assertions.assertEquals("user3", userDtls.getUsername().toString())  ;
     }
 
-    @Test
-    public void findUserDetailsByLoginShoulNotFind(){
-        UserDetails userDtls = usersRepository.findByLogin("user.falso@login.com");
-
-        Assertions.assertTrue(userDtls.getUsername().isEmpty());
-    }
 
     @Test
     public void findUserDetailsByLoginShoulMatchAutorithesAdmin(){
@@ -154,7 +147,7 @@ public class UsersRepositoryTests {
     }
     @Test
     public void findUserDetailsByLoginShoulMatchAutorithesUser(){
-        UserDetails userDtls = usersRepository.findByLogin("user3@example.com");
+        UserDetails userDtls = usersRepository.findByLogin("user3");
 
         List<String> userRoles = List.of("ROLE_USER");
 

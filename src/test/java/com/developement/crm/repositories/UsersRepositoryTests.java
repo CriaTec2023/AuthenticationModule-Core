@@ -21,6 +21,7 @@ public class UsersRepositoryTests {
 
     @Test
     public void findUserModelByLoginShouldFind(){
+
         List<UserModel> users = usersRepository.findAll();
 
         int size = users.size();

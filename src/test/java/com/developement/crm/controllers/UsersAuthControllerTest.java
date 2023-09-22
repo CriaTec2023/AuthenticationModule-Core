@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -137,6 +137,10 @@ public class UsersAuthControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").value(user1.getToken()))
                 .andExpect(jsonPath("$.message").value("Usuário logado com sucesso"));
+
+
+        verify(usersService, times(1)).findUserByLogin(anyString());
+        verify(usersRepository, times(1));
 
     }
 

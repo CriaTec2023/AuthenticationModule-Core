@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
+
 
 
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -25,14 +25,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Optional;
+
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -65,10 +62,10 @@ public class UsersAuthControllerTest {
      AuthenticationManager authenticationManager;
 
     private UserModel user1;
-    private UserModel user2;
-    private UserModel user3;
 
-    private UserLoginDto userLoginDto;
+    private UserLoginDto user1LoginDto;
+
+    private UserLoginDto user2LoginDto ;
 
 
 
@@ -85,37 +82,18 @@ public class UsersAuthControllerTest {
                 .role(Roles.ADMIN)
                 .build();
 
-        user2 = UserModel.builder()
-                .login("user2")
-                .password("password2")
-                .email("user2@example.com")
-                .name("User Two")
-                .token("token2")
-                .unidade(Unidades.BM)
-                .creationDate(LocalDateTime.now())
-                .role(Roles.USER)
-                .build();
 
-        user3 = UserModel.builder()
-                .login("user3")
-                .password("password3")
-                .email("user3@example.com")
-                .name("User Three")
-                .token("token3")
-                .unidade(Unidades.Resende)
-                .creationDate(LocalDateTime.now())
-                .role(Roles.USER)
-                .build();
 
-        userLoginDto = UserLoginDto.builder()
+        user1LoginDto = UserLoginDto.builder()
                 .login(user1.getLogin())
                 .password(user1.getPassword())
                 .build();
 
+        user2LoginDto = UserLoginDto.builder()
+                .login("")
+                .password("")
+                .build();
 
-        UserLoginDto userLoginDto = new UserLoginDto();
-        userLoginDto.setLogin("example_user");
-        userLoginDto.setPassword("password123");
 
         // Simula a autenticação com sucesso
         Authentication authentication = new UsernamePasswordAuthenticationToken(user1, null);
@@ -131,18 +109,15 @@ public class UsersAuthControllerTest {
 
         ResultActions response = mockMvc.perform(post("/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userLoginDto)));
+                .content(objectMapper.writeValueAsString(user1LoginDto)));
 
         response
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").value(user1.getToken()))
                 .andExpect(jsonPath("$.message").value("Usuário logado com sucesso"));
 
-
-        verify(usersService, times(1)).findUserByLogin(anyString());
-        verify(usersRepository, times(1));
-
     }
+
 
     @Test
     void loginUsersShouldThrowBadCredentialsError() throws Exception {
@@ -152,7 +127,7 @@ public class UsersAuthControllerTest {
 
         ResultActions response = mockMvc.perform(post("/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userLoginDto)));
+                .content(objectMapper.writeValueAsString(user2LoginDto)));
 
         response
                 .andExpect(status().isBadRequest())

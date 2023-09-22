@@ -9,7 +9,6 @@ import com.developement.crm.repositories.UsersRepository;
 import com.developement.crm.services.TokenService;
 import com.developement.crm.services.UsersService;
 import jakarta.validation.Valid;
-import org.apache.catalina.LifecycleState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +39,8 @@ public class AuthenticationUsersController {
     @Autowired
     UsersRepository usersRepository;
 
+
+
     @GetMapping("/make")
     public String makeChanges(){
 
@@ -67,7 +68,7 @@ public class AuthenticationUsersController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid UserLoginDto data){
-//        HashMap mensagem = new HashMap();
+
         try {
             var userNamePassword = new UsernamePasswordAuthenticationToken(data.getLogin(), data.getPassword());
             var authentication = authenticationManager.authenticate(userNamePassword);

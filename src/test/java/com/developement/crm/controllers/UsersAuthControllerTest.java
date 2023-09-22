@@ -22,6 +22,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
@@ -110,22 +111,22 @@ public class UsersAuthControllerTest {
                 .login(user1.getLogin())
                 .password(user1.getPassword())
                 .build();
+
+
         UserLoginDto userLoginDto = new UserLoginDto();
         userLoginDto.setLogin("example_user");
         userLoginDto.setPassword("password123");
 
         // Simula a autenticação com sucesso
-
         Authentication authentication = new UsernamePasswordAuthenticationToken(user1, null);
         when(authenticationManager.authenticate(any())).thenReturn(authentication);
 
         // Simula a geração de token
-
         when(tokenService.generateToken(any())).thenReturn(user1.getToken());
     }
 
     @Test
-     void loginUsersShouldReturnToken() throws Exception {
+     void loginUsersShouldReturnTokenAndMessage() throws Exception {
 
 
         ResultActions response = mockMvc.perform(post("/auth/login")
@@ -138,6 +139,24 @@ public class UsersAuthControllerTest {
                 .andExpect(jsonPath("$.message").value("Usuário logado com sucesso"));
 
     }
+
+    @Test
+    void loginUsersShouldThrowBadCredentialsError() throws Exception {
+
+        when(authenticationManager.authenticate(any()))
+                .thenThrow(new BadCredentialsException("Dados de usuário inválidos"));
+
+        ResultActions response = mockMvc.perform(post("/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userLoginDto)));
+
+        response
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.token").isEmpty())
+                .andExpect(jsonPath("$.message").value("Dados de usuário inválidos"));
+    }
+
+
 
 
 

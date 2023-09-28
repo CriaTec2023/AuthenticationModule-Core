@@ -45,6 +45,7 @@ public class AuthenticationUsersController {
     public String makeChanges(){
 
         try{
+
             List<UserModel> users = usersRepository.findAll();
 
             for(UserModel user : users){

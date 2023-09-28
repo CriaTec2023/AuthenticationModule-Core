@@ -70,6 +70,13 @@ public class AuthenticationUsersController {
     public ResponseEntity<?> login(@RequestBody @Valid UserLoginDto data){
 
         try {
+            UserModel user = usersService.findUserByLogin(data.getLogin());
+
+            if (user == null) {
+                String message = "Usuário não encontrado"+data.getLogin();
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
+            }
+
             var userNamePassword = new UsernamePasswordAuthenticationToken(data.getLogin(), data.getPassword());
             var authentication = authenticationManager.authenticate(userNamePassword);
 

@@ -25,7 +25,7 @@ public class UsersDto {
     private String password;
     private String name;
     private Unidades unidade;
-    @NotBlank
+
     private Roles role;
 
 

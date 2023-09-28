@@ -20,34 +20,33 @@ public class TokenService {
     private String secret;
 
     public String generateToken(UserModel user){
-        Algorithm algorithm = Algorithm.HMAC256(secret);
         try{
+            Algorithm algorithm = Algorithm.HMAC256(secret);
             String token = JWT.create()
-                    .withIssuer("CRM")
-                    .withSubject(user.getId())
-                    .withExpiresAt(expireToken())
-                    .withClaim("roles", user.getRoleString())
+                    .withIssuer("auth-api")
+                    .withSubject(user.getLogin())
+                    .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
             return token;
-        }catch (JWTCreationException exception){
+        } catch (JWTCreationException exception) {
             throw new RuntimeException("Error while generating token", exception);
         }
     }
 
     public String validateToken(String token){
-        Algorithm algorithm = Algorithm.HMAC256(secret);
-        try{
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.require(algorithm)
-                    .withIssuer("CRM")
+                    .withIssuer("auth-api")
                     .build()
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException exception){
-            throw new RuntimeException("Error while generating token", exception);
+            return "";
         }
     }
 
-    private Instant expireToken() {
+    private Instant genExpirationDate(){
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
 }

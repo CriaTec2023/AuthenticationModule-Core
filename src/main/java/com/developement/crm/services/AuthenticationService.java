@@ -16,27 +16,18 @@ import java.util.Optional;
 
 @Service
 public class AuthenticationService implements UserDetailsService {
-
     @Autowired
-    private UsersRepository userRepository;
-
+    UsersRepository repository;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        try {
-            return userRepository.findByLogin(username);
-        } catch (Exception e) {
-            throw new UsernameNotFoundException("User not found with username: " + username);
-        }
+        return repository.findByLogin(username);
     }
 
-    public UserModel getUserBySession(){
+    public String getUserbySession(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails user = (UserDetails) authentication.getPrincipal();
-        Optional<UserModel> userOpt = userRepository.findUserModelByEmail(user.getUsername());
-        if(userOpt.isPresent()){
-            return userOpt.get();
-        }else {
-            throw new NoUserFindOnSession("User not found user in this session: " + authentication.getName());
-        }
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+
+        return userDetails.getUsername();
     }
 }

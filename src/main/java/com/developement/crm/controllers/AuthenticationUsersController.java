@@ -54,7 +54,7 @@ public class AuthenticationUsersController {
 
                 String token = tokenService.generateToken(user);
 
-                user.setToken(token);
+
                 user.setPassword(newPassword);
 
                 usersRepository.save(user);

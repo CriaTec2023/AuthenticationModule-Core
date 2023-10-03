@@ -1,4 +1,4 @@
-package com.developement.crm.configs.security;
+package com.developement.crm.configs.cors;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

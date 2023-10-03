@@ -31,6 +31,8 @@ public class SecurityConfig {
                             .requestMatchers(HttpMethod.POST,"auth/register").permitAll()
                             .requestMatchers("/v3/api-docs/**","/swagger-ui.html", "/swagger-ui/**").permitAll()
                             .requestMatchers(HttpMethod.GET,"auth/make").permitAll()
+                            .requestMatchers(HttpMethod.GET,"auth/getUsers").permitAll()
+                            .requestMatchers(HttpMethod.GET,"/chat").permitAll()
                             .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

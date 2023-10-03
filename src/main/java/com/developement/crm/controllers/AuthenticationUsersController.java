@@ -67,6 +67,21 @@ public class AuthenticationUsersController {
 
     }
 
+    @GetMapping("/getUsers")
+    public List<UserModel> getUsers(){
+
+        try{
+            List<UserModel> users = usersRepository.findAll();
+
+            return users;
+
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid UserLoginDto data){
 
@@ -112,6 +127,5 @@ public class AuthenticationUsersController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
         }
-
     }
 }

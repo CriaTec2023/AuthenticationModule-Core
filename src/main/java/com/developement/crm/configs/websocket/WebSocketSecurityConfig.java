@@ -7,20 +7,20 @@ import org.springframework.security.config.annotation.web.socket.EnableWebSocket
 
 import static org.springframework.messaging.simp.SimpMessageType.*;
 
-@Configuration
-@EnableWebSocketSecurity
-public class WebSocketSecurityConfig extends AbstractSecurityWebSocketMessageBrokerConfigurer {
-    @Override
-    protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
-        messages
-                .simpTypeMatchers(CONNECT, UNSUBSCRIBE, DISCONNECT).permitAll()
-                .simpDestMatchers("/app/**").hasRole("ADMIN")
-                .simpDestMatchers("/app/**").authenticated() // Defina suas regras de autorização aqui
-                .anyMessage().authenticated();
-    }
-
-    @Override
-    protected boolean sameOriginDisabled() {
-        return true;
-    }
-}
+//@Configuration
+//@EnableWebSocketSecurity
+//public class WebSocketSecurityConfig extends AbstractSecurityWebSocketMessageBrokerConfigurer {
+//    @Override
+//    protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
+//        messages
+//                .simpTypeMatchers(CONNECT, UNSUBSCRIBE, DISCONNECT).permitAll()
+//                .simpDestMatchers("/app/**").hasRole("ADMIN")
+//                .simpDestMatchers("/app/**").authenticated() // Defina suas regras de autorização aqui
+//                .anyMessage().authenticated();
+//    }
+//
+//    @Override
+//    protected boolean sameOriginDisabled() {
+//        return true;
+//    }
+//}

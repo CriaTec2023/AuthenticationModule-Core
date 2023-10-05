@@ -13,7 +13,7 @@ public class CorsConfig  {
         return new WebMvcConfigurer() {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                .allowedMethods("GET", "POST", "PUT", "DELETE","OPTIONS")
+                .allowedMethods("*")
                 .allowedHeaders("*")
                 .allowedOrigins("*");
 //                .allowCredentials(true);

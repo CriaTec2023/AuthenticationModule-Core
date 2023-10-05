@@ -23,40 +23,40 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 
 import java.util.List;
 
-@Configuration
-@EnableWebSocketMessageBroker
-@Order(Ordered.HIGHEST_PRECEDENCE + 99)
+//@Configuration
+//@EnableWebSocketMessageBroker
+//@Order(Ordered.HIGHEST_PRECEDENCE + 99)
 public class WebSocketAuthenticationConfig implements WebSocketMessageBrokerConfigurer {
-
-    private static final Logger logger = LoggerFactory.getLogger(WebSocketAuthenticationConfig.class);
-
-    @Autowired
-    private TokenService tokenService;
-
-    @Autowired
-    private UsersRepository usersRepository;
-
-    @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(new ChannelInterceptor() {
-            @Override
-            public Message<?> preSend(Message<?> message, MessageChannel channel) {
-                StompHeaderAccessor accessor =
-                        MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-                if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-                    List<String> authorization = accessor.getNativeHeader("Authorization");
-                    logger.debug("Authorization: {}", authorization);
-
-                    String accessToken = authorization.get(0).split(" ")[1];
-                    String token = tokenService.validateToken(accessToken);
-                    var login = tokenService.validateToken(token);
-                    UserDetails user = usersRepository.findByLogin(login);
-
-                    Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                    accessor.setUser(authentication);
-                }
-                return message;
-            }
-        });
-    }
+//
+//    private static final Logger logger = LoggerFactory.getLogger(WebSocketAuthenticationConfig.class);
+//
+//    @Autowired
+//    private TokenService tokenService;
+//
+//    @Autowired
+//    private UsersRepository usersRepository;
+//
+//    @Override
+//    public void configureClientInboundChannel(ChannelRegistration registration) {
+//        registration.interceptors(new ChannelInterceptor() {
+//            @Override
+//            public Message<?> preSend(Message<?> message, MessageChannel channel) {
+//                StompHeaderAccessor accessor =
+//                        MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+//                if (StompCommand.CONNECT.equals(accessor.getCommand())) {
+//                    List<String> authorization = accessor.getNativeHeader("Authorization");
+//                    logger.debug("Authorization: {}", authorization);
+//
+//                    String accessToken = authorization.get(0).split(" ")[1];
+//                    String token = tokenService.validateToken(accessToken);
+//                    var login = tokenService.validateToken(token);
+//                    UserDetails user = usersRepository.findByLogin(login);
+//
+//                    Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+//                    accessor.setUser(authentication);
+//                }
+//                return message;
+//            }
+//        });
+//    }
 }

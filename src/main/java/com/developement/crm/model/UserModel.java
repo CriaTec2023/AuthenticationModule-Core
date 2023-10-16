@@ -24,11 +24,11 @@ public class UserModel implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "user_id")
     private String id;
     @Column(unique = true)
     private String login;
     private String password;
+    @Column(unique = true)
     private String email;
     private String name;
     private String token;
@@ -39,7 +39,7 @@ public class UserModel implements UserDetails {
     private LocalDateTime acesso;
     @Enumerated(EnumType.STRING)
     private Roles role;
-    @OneToMany(mappedBy = "clientOwner", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "clientOwner", cascade = CascadeType.ALL)
     private List<Clients> clients;
 
     public UserModel(String login, String password, String name, Unidades unidade) {

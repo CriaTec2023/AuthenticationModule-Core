@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.UUID;
 
 
 @RestController
@@ -50,17 +51,13 @@ public class AuthenticationUsersController {
     public String makeChanges(){
 
         try{
-
             List<UserModel> users = usersRepository.findAll();
 
             for(UserModel user : users){
-                String oldPassword = user.getPassword();
-                String newPassword = new BCryptPasswordEncoder().encode(oldPassword);
+                user.setId(UUID.randomUUID().toString());
+               String token = tokenService.generateToken(user);
 
-//                String token = tokenService.generateToken(user);
-
-
-                user.setPassword(newPassword);
+                user.setToken(token);
 
                 usersRepository.save(user);
             }
@@ -75,13 +72,16 @@ public class AuthenticationUsersController {
     @GetMapping("/getUsers")
     public List<UserModel> getUsers(){
 
-        try{
 
+
+        try{
             return usersRepository.findAll();
 
         } catch (Exception e){
             throw new RuntimeException(e);
         }
+
+
 
     }
 

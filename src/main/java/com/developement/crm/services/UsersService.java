@@ -12,12 +12,16 @@ import java.util.Optional;
 @Service
 public class UsersService {
 
-    @Autowired
-    private UsersRepository userRepository;
+
+    private final UsersRepository userRepository;
+
+    private final TokenService tokenService;
 
     @Autowired
-    private TokenService tokenService;
-
+    public UsersService(UsersRepository userRepository, TokenService tokenService) {
+        this.userRepository = userRepository;
+        this.tokenService = tokenService;
+    }
 
     public UserModel creatNewUser(UserModel user) {
         if(user.getId() != null && userRepository.findUserModelByLogin(user.getLogin()).isPresent()) {

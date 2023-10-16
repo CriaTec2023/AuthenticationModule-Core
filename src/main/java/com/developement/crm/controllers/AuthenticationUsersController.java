@@ -1,5 +1,6 @@
 package com.developement.crm.controllers;
 
+
 import com.developement.crm.dtos.MessageDto;
 import com.developement.crm.dtos.ResponseLoginDto;
 import com.developement.crm.dtos.UserLoginDto;
@@ -9,7 +10,6 @@ import com.developement.crm.repositories.UsersRepository;
 import com.developement.crm.services.TokenService;
 import com.developement.crm.services.UsersService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,8 +18,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -27,17 +25,24 @@ import java.util.List;
 @RequestMapping("auth")
 public class AuthenticationUsersController {
 
-    @Autowired
-    private UsersService usersService;
 
-    @Autowired
-    private TokenService tokenService;
+    private final UsersService usersService;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
 
-    @Autowired
-    UsersRepository usersRepository;
+    private final TokenService tokenService;
+
+
+    private final AuthenticationManager authenticationManager;
+
+
+    private final UsersRepository usersRepository;
+
+    public AuthenticationUsersController(UsersService usersService, TokenService tokenService, AuthenticationManager authenticationManager, UsersRepository usersRepository) {
+        this.usersService = usersService;
+        this.tokenService = tokenService;
+        this.authenticationManager = authenticationManager;
+        this.usersRepository = usersRepository;
+    }
 
 
 
@@ -52,7 +57,7 @@ public class AuthenticationUsersController {
                 String oldPassword = user.getPassword();
                 String newPassword = new BCryptPasswordEncoder().encode(oldPassword);
 
-                String token = tokenService.generateToken(user);
+//                String token = tokenService.generateToken(user);
 
 
                 user.setPassword(newPassword);
@@ -71,9 +76,8 @@ public class AuthenticationUsersController {
     public List<UserModel> getUsers(){
 
         try{
-            List<UserModel> users = usersRepository.findAll();
 
-            return users;
+            return usersRepository.findAll();
 
         } catch (Exception e){
             throw new RuntimeException(e);
@@ -109,20 +113,21 @@ public class AuthenticationUsersController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid UsersDto user){
-        HashMap mensagem = new HashMap();
+
+
 
         try {
             UserDetails userDetails = usersRepository.findByLogin(user.getLogin());
             if (userDetails != null) {
-                mensagem.put("mensagem", "login já castrato");
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(mensagem);
+                MessageDto message = new MessageDto("message", "login já castrato");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(message);
             }else {
                 user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
                 usersService.creatNewUser(UsersDto.convertToUserModel(user));
 
-                mensagem.put("mensagem", "usuario cadastrado com sucesso");
+                MessageDto message = new MessageDto("message", "usuario cadastrado com sucesso");
 
-                return ResponseEntity.status(HttpStatus.CREATED).body(mensagem);
+                return ResponseEntity.status(HttpStatus.CREATED).body(message);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);

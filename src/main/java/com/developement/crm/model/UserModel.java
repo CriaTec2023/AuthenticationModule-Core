@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,6 +24,7 @@ public class UserModel implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "user_id")
     private String id;
     @Column(unique = true)
     private String login;
@@ -38,6 +39,8 @@ public class UserModel implements UserDetails {
     private LocalDateTime acesso;
     @Enumerated(EnumType.STRING)
     private Roles role;
+    @OneToMany(mappedBy = "clientOwner", fetch = FetchType.LAZY)
+    private List<Clients> clients;
 
     public UserModel(String login, String password, String name, Unidades unidade) {
         this.creationDate = LocalDateTime.now();

@@ -5,12 +5,16 @@ import com.developement.crm.model.Clients;
 import com.developement.crm.model.UserModel;
 import com.developement.crm.repositories.ClientsRepository;
 import com.developement.crm.repositories.UsersRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.rmi.server.LogStream.log;
+
 @Service
+@Slf4j
 public class ClientsService {
     private final ClientsRepository clientsRepository;
 
@@ -83,7 +87,7 @@ public class ClientsService {
 
 
         if (listOfClients.isEmpty()){
-            throw new RuntimeException("Sem clientes para o usuario: "+loginSession );
+            log.info("Sem clientes para o usuario: "+loginSession );
         }
         return listOfClients;
     }

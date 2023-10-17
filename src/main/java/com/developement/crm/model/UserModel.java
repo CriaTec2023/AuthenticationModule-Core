@@ -2,6 +2,7 @@ package com.developement.crm.model;
 
 import com.developement.crm.enums.Roles;
 import com.developement.crm.enums.Unidades;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -40,6 +41,7 @@ public class UserModel implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Roles role;
     @OneToMany(mappedBy = "clientOwner", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"clientOwner"})
     private List<Clients> clients;
 
     public UserModel(String login, String password, String name, Unidades unidade) {

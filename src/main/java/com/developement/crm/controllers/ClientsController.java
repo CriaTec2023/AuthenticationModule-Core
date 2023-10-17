@@ -1,6 +1,7 @@
 package com.developement.crm.controllers;
 
 import com.developement.crm.dtos.ClientsDto;
+import com.developement.crm.dtos.GetClientsDto;
 import com.developement.crm.model.Clients;
 import com.developement.crm.model.UserModel;
 import com.developement.crm.repositories.ClientsRepository;
@@ -67,13 +68,20 @@ public class ClientsController {
     @GetMapping("/getMyClients")
     public ResponseEntity<?> getMyClients(){
 
-        List<Clients> clients = clienteRepository.findAll();
+        List<GetClientsDto> clientsReturn = new ArrayList<>();
+
+        List<Clients> clients = clientsService.getAllClients();
+
+        for (Clients client: clients) {
+            GetClientsDto clientsDto = GetClientsDto.toGetClientDto(client);
+            clientsReturn.add(clientsDto);
+        }
 
 
         if (clients.isEmpty()){
-            return new ResponseEntity<>("Sem clientes para o usuario {}", HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(clients, HttpStatus.OK);
+        return new ResponseEntity<>(clientsReturn, HttpStatus.OK);
     }
 
 

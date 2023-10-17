@@ -1,6 +1,7 @@
 package com.developement.crm.model;
 
 import com.developement.crm.enums.NegotiatonStatus;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +24,7 @@ public class Clients {
     private String phone;
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties({"clients"})
     private UserModel clientOwner;
     @Enumerated(EnumType.STRING)
     private NegotiatonStatus status;

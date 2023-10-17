@@ -1,5 +1,6 @@
 package com.developement.crm.services;
 
+import com.auth0.jwt.JWT;
 import com.developement.crm.exceptionHandlers.NoUserFindOnSession;
 import com.developement.crm.model.UserModel;
 import com.developement.crm.repositories.UsersRepository;
@@ -23,11 +24,20 @@ public class AuthenticationService implements UserDetailsService {
         return repository.findByLogin(username);
     }
 
-    public String getUserbySession(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+    public static String getUserbySession(){
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                return userDetails.getUsername();
+            } else {
+                // Trate o caso em que não há usuário autenticado.
+                return "Nenhum usuário autenticado encontrado";
+            }
 
+    }
 
-        return userDetails.getUsername();
+    public static String getUserbyToken(String token) {
+        String user = JWT.decode(token).getSubject();
+        return user;
     }
 }

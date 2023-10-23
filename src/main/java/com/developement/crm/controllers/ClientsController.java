@@ -23,18 +23,16 @@ import java.util.List;
 public class ClientsController {
 
     private final ClientsService clientsService;
-
     private final UsersService usersService;
 
-    private final ClientsRepository clienteRepository;
-
     @Autowired
-    public ClientsController(ClientsService clientsService,
-                             UsersService usersService,
-                             ClientsRepository clienteRepository) {
+    public ClientsController(
+            ClientsService clientsService,
+            UsersService usersService
+                             ) {
         this.clientsService = clientsService;
         this.usersService = usersService;
-        this.clienteRepository = clienteRepository;
+
     }
 
 
@@ -46,7 +44,9 @@ public class ClientsController {
 
         clientsService.creatNewClient(clientsModel);
 
-        return new ResponseEntity<>(clientsModel, HttpStatus.OK);
+        GetClientsDto getClientsDto = GetClientsDto.toGetClientDto(clientsModel);
+
+        return new ResponseEntity<>(getClientsDto, HttpStatus.OK);
     }
 
     @PostMapping("/createClients")

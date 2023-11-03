@@ -1,6 +1,5 @@
 package com.developement.crm.controllers;
 
-
 import com.developement.crm.dtos.MessageDto;
 import com.developement.crm.dtos.ResponseLoginDto;
 import com.developement.crm.dtos.UserLoginDto;
@@ -10,6 +9,7 @@ import com.developement.crm.repositories.UsersRepository;
 import com.developement.crm.services.TokenService;
 import com.developement.crm.services.UsersService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,32 +18,26 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 
 @RestController
 @RequestMapping("auth")
 public class AuthenticationUsersController {
 
+    @Autowired
+    private UsersService usersService;
 
-    private final UsersService usersService;
+    @Autowired
+    private TokenService tokenService;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-    private final TokenService tokenService;
-
-
-    private final AuthenticationManager authenticationManager;
-
-
-    private final UsersRepository usersRepository;
-
-    public AuthenticationUsersController(UsersService usersService, TokenService tokenService, AuthenticationManager authenticationManager, UsersRepository usersRepository) {
-        this.usersService = usersService;
-        this.tokenService = tokenService;
-        this.authenticationManager = authenticationManager;
-        this.usersRepository = usersRepository;
-    }
+    @Autowired
+    UsersRepository usersRepository;
 
 
 
@@ -51,13 +45,17 @@ public class AuthenticationUsersController {
     public String makeChanges(){
 
         try{
+
             List<UserModel> users = usersRepository.findAll();
 
             for(UserModel user : users){
-                user.setId(UUID.randomUUID().toString());
-               String token = tokenService.generateToken(user);
+                String oldPassword = user.getPassword();
+                String newPassword = new BCryptPasswordEncoder().encode(oldPassword);
 
-                user.setToken(token);
+                String token = tokenService.generateToken(user);
+
+
+                user.setPassword(newPassword);
 
                 usersRepository.save(user);
             }
@@ -68,23 +66,6 @@ public class AuthenticationUsersController {
         }
 
     }
-
-    @GetMapping("/getUsers")
-    public List<UserModel> getUsers(){
-
-
-
-        try{
-            return usersRepository.findAll();
-
-        } catch (Exception e){
-            throw new RuntimeException(e);
-        }
-
-
-
-    }
-
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid UserLoginDto data){
@@ -113,24 +94,24 @@ public class AuthenticationUsersController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid UsersDto user){
-
-
+        HashMap mensagem = new HashMap();
 
         try {
             UserDetails userDetails = usersRepository.findByLogin(user.getLogin());
             if (userDetails != null) {
-                MessageDto message = new MessageDto("message", "login já castrato");
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(message);
+                mensagem.put("mensagem", "login já castrato");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(mensagem);
             }else {
                 user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
                 usersService.creatNewUser(UsersDto.convertToUserModel(user));
 
-                MessageDto message = new MessageDto("message", "usuario cadastrado com sucesso");
+                mensagem.put("mensagem", "usuario cadastrado com sucesso");
 
-                return ResponseEntity.status(HttpStatus.CREATED).body(message);
+                return ResponseEntity.status(HttpStatus.CREATED).body(mensagem);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
         }
+
     }
 }

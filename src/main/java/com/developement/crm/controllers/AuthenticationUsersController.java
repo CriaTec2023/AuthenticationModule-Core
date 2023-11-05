@@ -1,9 +1,6 @@
 package com.developement.crm.controllers;
 
-import com.developement.crm.dtos.MessageDto;
-import com.developement.crm.dtos.ResponseLoginDto;
-import com.developement.crm.dtos.UserLoginDto;
-import com.developement.crm.dtos.UsersDto;
+import com.developement.crm.dtos.*;
 import com.developement.crm.model.UserModel;
 import com.developement.crm.repositories.UsersRepository;
 import com.developement.crm.services.TokenService;
@@ -113,5 +110,10 @@ public class AuthenticationUsersController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
         }
 
+    }
+    @PostMapping("validation")
+    public TokenValidation validation(@RequestParam String tokenKey){
+        String response = tokenService.validateToken(tokenKey);
+        return (response!= "") ? new TokenValidation(tokenKey, "valid") : new TokenValidation(tokenKey, "invalid");
     }
 }

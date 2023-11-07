@@ -1,4 +1,4 @@
-# API Rest -  COPIA DO README 
+# PROJETO - Collaborator Space
 
 http://localhost:8081/swagger-ui/index.html#/
 https://athemes.com/collections/free-bootstrap-admin-templates/
@@ -6,7 +6,7 @@ https://athemes.com/collections/free-bootstrap-admin-templates/
 https://github.com/millapupo/escolaBurlescaApi/blob/main/README.md?plain=1
 proietaria do readme 
 
-API Rest da aplicação Escola Burlesca, contendo as funcionalidades de CRUD de professoras e de alunas, além de agendamento e cancelamento de aulas experimentais.
+ReadMe compartilhado entre todos os modulos do espaço do colaborado
 
 ## 🚀 Como começar
 
@@ -14,107 +14,199 @@ Essas instruções permitirão que você obtenha uma cópia do projeto em opera�
 
 ### 📋 Pré-requisitos
 
-Para testar a aplicação é preciso ter o Java SE 17 instalado.
+O back-end faz uso do Java SE 17.
+O front-end faz uso do Angular CLI version 16.1.8.
 
 ### 🔧 Instalação
 
-Faça o download da aplicação e abra na IDE de sua preferência, para melhor desempenho sugiro IntelliJ ou Eclipse.
+Faça o download da aplicação e abra na IDE de sua preferência, para melhor desempenho sugiro IntelliJ e VSCode
 
 ## ⚙️ Executando
 
-Vá em "src/main/java/burlesca.escola.api" e rode a aplicação em "ApiApplication".
+ContentModule-CollaboratorSpace - Vá em "ContentModule-CollaboratorSpace/src/main/java/com/content/module" e rode a aplicação em "ModuleApplication.java".
 
-Para testar as requisições é possível usar frameworks como Insomnia, Postman, etc ou acessar pelo Swagger no link https://app.swaggerhub.com/apis-docs/MILLAMEKARY/escola-burlesca_api/1.0.0#/
+ContentModule-CollaboratorSpace - Vá em "AuthenticationModule-CollaboratorSpace/src/main/java/com/developement/crm
+/" e rode a aplicação em "BackEndCrmApplication.java".
 
-## 💻 Funcionalidades da aplicação
+Rode `ng build` para fazer a build do projeto. O artefato da build vai estar no `dist/collaborator-module` diretótiro.
 
-#### Cadastramento de professoras
+# 💻 Funcionalidades da aplicação
 
-A aplicação permite cadastramento de professoras, sendo obrigatório o preenchimento das seguintes informações:
+## Cadastro de Usuários
 
-    Nome
-    E-mail
-    Telefone
-    Modalidade (Bollywood, Burlesque, Pole acro, Pole Flow, Ballet, Salsa shines, Dança do ventre, Tribal, Lyrical, Jazz, Brodway, Chair dance, Flexibilidade, Street dance e Teatro) - sendo necessário cadastrar mais de uma modalidade por professora. 
+A aplicação permite o cadastro de usuários com os seguintes dados:
 
-#### Cadastramento de alunas
+- Nome de Usuário (Login)*
+- Senha*
+- E-mail*
+- Nome*
+- Papel (Role)
+- Unidade*
+- Data de Criação
+- Data de Atualização
+- Último Acesso
 
-A aplicação permite cadastramento de alunas, sendo obrigatório o preenchimento das seguintes informações:
+*Obrigatórios - input Usuario 
 
-    Nome
-    E-mail
-    Telefone
-    Modalidade (Bollywood, Burlesque, Pole acro, Pole Flow, Ballet, Salsa shines, Dança do ventre, Tribal, Lyrical, Jazz, Brodway, Chair dance, Flexibilidade, Street dance e Teatro) - sendo possível cadastrar apenas uma modalidade por aluna.
 
-#### Listagem de professoras e alunas
+### Geração de Token
 
-A aplicação permite a listagem de professoras e alunas cadastradas nos quais os seguintes dados serão exibidos:
+A aplicação gera tokens de autenticação para os usuários com base nas informações fornecidas.
 
-    Nome
-    E-mail
-    Telefone
-    Modalidade
+### Login de Usuários
 
-A listagem é ordenada pelo nome, de maneira crescente, bem como ser paginada, trazendo 10 registros por página.
+Os usuários podem fazer login na aplicação fornecendo seu nome de usuário (login) e senha. A autenticação é realizada usando o Spring Security.
 
-#### Atualização de professoras e alunas
+### Atualização de Usuários
 
-A aplicação permite a atualização dos seguintes de dados das professoras e alunas:
+Os usuários podem atualizar informações pessoais, como nome, senha, etc.
 
-    Nome
-    Telefone
-    Modalidade
+### Validação de Token
 
-#### Exclusão/Inativação de professoras e alunas
+A aplicação permite a validação de tokens de autenticação para garantir a segurança da autenticação.
 
-A aplicação permite a exclusão por meio da inativação das professoras ou alunas no sistema.
+### Serviço de Autenticação Personalizado
 
-#### Agendamento de aulas
+A aplicação inclui um serviço de autenticação personalizado para carregar detalhes do usuário com base no nome de usuário (login)
 
-A aplicação permite o agendamento de aulas, na qual as seguintes informações deverão ser preenchidas:
+##  Modulo de Eventos
 
-    Aluna
-    Modalidade
-    Professora
-    Data/Hora da aula
+### Listagem de Todos os Eventos
 
-As seguintes regras de negócio devem ser seguidas:
+A API permite listar todos os eventos cadastrados na seguinte rota:
 
-As aulas deverão ser agendadas de segunda a sexta, das 10:00 às 19:00;
+- GET /events/all
 
-As aulas tem duração fixa de 1 hora;
+A lista de eventos é ordenada por data de início e pode ser paginada.
 
-As aulas devem ser agendadas com antecedência mínima de 2 dias;
+### Criação de Novos Eventos
 
-Não permitir o agendamento de aulas com alunas inativas no sistema;
+A API permite a criação de novos eventos através da seguinte rota:
 
-Não permitir o agendamento de aulas com professoras inativas no sistema;
+- POST /events/event
 
-Não permitir o agendamento de mais de uma aula no mesmo mês para uma mesma aluna;
+É necessário fornecer os detalhes do evento, incluindo título, data de início, data de término e cor.
 
-A escolha da professora é obrigatória.
+### Salvamento de Múltiplos Eventos
 
-#### Cancelamento de aulas
+A API também permite o salvamento de múltiplos eventos de uma só vez usando a rota:
 
-A aplicação permite o cancelamento de aulas, na qual as seguintes informações deverão ser preenchidas:
+- POST /events/saveMultipleEvents
 
-    Aula
-    Motivo do cancelamento 
+Basta fornecer uma lista de eventos e eles serão salvos no banco de dados.
 
-As seguintes regras de negócio devem ser seguidas:
+### Atualização de Eventos
 
-É obrigatório informar o motivo do cancelamento da aula, dentre as opções: aluna desistiu, professora cancelou ou outros;
+Os eventos existentes podem ser atualizados utilizando a seguinte rota:
 
-Uma aula somente poderá ser cancelada com antecedência mínima de 4 horas.
+- PUT /events/update
+
+É necessário fornecer os detalhes do evento a ser atualizado, incluindo o ID do evento, título, data de início, data de término e cor.
+
+### Exclusão de Eventos
+
+Eventos podem ser excluídos por meio da rota:
+
+- DELETE /events/eventDeletion
+
+Basta fornecer o ID do evento que deseja excluir.
+
+##  Modulo de Posts
+
+### Criação de Novos Posts
+
+A API permite a criação de novos posts através da seguinte rota:
+
+- POST /posts/post
+
+É necessário fornecer os detalhes do post, incluindo título, conteúdo, resumo, data e URL da imagem.
+
+### Atualização de Posts
+
+Posts existentes podem ser atualizados usando a seguinte rota:
+
+- POST /posts/atualizationPost
+
+É necessário fornecer os detalhes do post a ser atualizado, incluindo o ID do post, título, conteúdo, resumo, data e URL da imagem.
+
+### Exclusão de Posts
+
+Posts podem ser excluídos por meio da rota:
+
+- DELETE /posts/postDeletion
+
+Basta fornecer o ID do post que deseja excluir.
+
+### Salvamento de Múltiplos Posts
+
+A API também permite o salvamento de múltiplos posts de uma só vez usando a rota:
+
+- POST /posts/saveMultiplePosts
+
+Forneça uma lista de posts e eles serão salvos no banco de dados.
+
+### Busca de Posts por ID
+
+Você pode buscar um post específico por ID usando a rota:
+
+- GET /posts/idKey
+
+### Listagem de Todos os Posts
+
+A API permite listar todos os posts cadastrados na seguinte rota:
+
+- GET /posts/allPosts
+
+### Encontrar Posts com Títulos Iguais
+
+Você pode encontrar posts com títulos iguais e removê-los usando a rota:
+
+- GET /posts/findForEqualsId
+
+### Validação de Token
+
+A API oferece validação de token de autenticação usando a rota:
+
+- GET /posts/allPostsValidation
+
+Forneça um token de autenticação no cabeçalho para validar a operação.
+
 
 ## 🛠️ Construído com
 
 * Java(TM) SE Runtime Environment
 * Spring Boot 3
 * Spring DATA
+* Spring Cloud(OpenFeign)
 * Spring Security
 * JSON Web Token
-* MySQL
-* Flyway
+* PostgreSQL | Mongo DB | H2(testes)
+* Junit  e Mockito
+* Clean Code
+* Versionamento Semântico
+  ************
+* Angular
+* Bootstrap 5.3v
+* Rxjs
+* Ngrx
+* angular-calendar
+* jwt-decode
+* ngx-cookie-service
+* ngx-pagination
 
-Desenvolvido por Milla Pupo
+
+
+## 👨‍💻 Desenvolvedor
+
+Luis Felipe Mota
+- [GitHub](https://github.com/lupesms97)
+- [LinkedIn](https://www.linkedin.com/in/luis-felipe-mota-desenvolvedor-java)
+
+## 📬 Contato
+
+Para informações adicionais ou dúvidas, entre em contato via e-mail: lupesms97@gmail.com.
+
+## 📝 Licença
+
+Este projeto está licenciado sob a Licença MIT - consulte o arquivo LICENSE de cada modulo para obter detalhes.
+

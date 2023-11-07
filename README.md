@@ -1,10 +1,7 @@
 # PROJETO - Collaborator Space
 
 http://localhost:8081/swagger-ui/index.html#/
-https://athemes.com/collections/free-bootstrap-admin-templates/
 
-https://github.com/millapupo/escolaBurlescaApi/blob/main/README.md?plain=1
-proietaria do readme 
 
 ReadMe compartilhado entre todos os modulos do espaço do colaborado
 

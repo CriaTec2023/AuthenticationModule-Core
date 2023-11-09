@@ -1,9 +1,7 @@
 package com.developement.crm.services;
 
 import com.developement.crm.exceptionHandlers.UserNotFoundException;
-import com.developement.crm.model.Clients;
 import com.developement.crm.model.UserModel;
-import com.developement.crm.repositories.ClientsRepository;
 import com.developement.crm.repositories.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,16 +17,13 @@ public class UsersService {
 
     private final TokenService tokenService;
 
-    private final ClientsService clientsService;
-
 
     @Autowired
     public UsersService(UsersRepository userRepository,
-                        TokenService tokenService,
-                        ClientsService clientsService) {
+                        TokenService tokenService
+                        ) {
         this.userRepository = userRepository;
         this.tokenService = tokenService;
-        this.clientsService = clientsService;
     }
 
     public UserModel creatNewUser(UserModel user) {

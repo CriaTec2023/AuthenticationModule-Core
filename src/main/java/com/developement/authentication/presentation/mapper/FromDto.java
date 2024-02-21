@@ -3,6 +3,7 @@ package com.developement.authentication.presentation.mapper;
 import com.developement.authentication.application.dtos.CreationUserDto;
 import com.developement.authentication.application.enums.Roles;
 import com.developement.authentication.domain.entity.Acess;
+import com.developement.authentication.domain.entity.ResetObject;
 import com.developement.authentication.domain.entity.UserModel;
 import lombok.Builder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,7 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-import java.util.UUID;
+
 
 
 @Builder
@@ -32,6 +33,11 @@ public class FromDto {
                         .AvailiableCompanies(dto.acessInfo().getAvailiableCompanies())
                         .permission(dto.acessInfo().getPermission())
                         .build())
+                 .resetObject(ResetObject.builder()
+                         .resetTokenValid(false)
+                         .resetToken("")
+                         .resetTokenExpireDate(LocalDateTime.now())
+                         .build())
                 .build();
 
 

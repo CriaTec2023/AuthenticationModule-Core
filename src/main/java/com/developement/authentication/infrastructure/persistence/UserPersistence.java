@@ -16,11 +16,12 @@ public interface UserPersistence extends JpaRepository<UserModel, String>, Users
 
     UserDetails findByLogin(String login);
 
-    Optional<UserModel> findByEmail(String email);
+    Optional<UserModel> findUserModelByEmail(String email);
 
     Optional<UserModel> findUserModelByLogin(String login);
 
     boolean existsByEmail(String id);
 
+    Optional<UserModel> findUserModelByResetObjectResetToken(String token);
 
 }

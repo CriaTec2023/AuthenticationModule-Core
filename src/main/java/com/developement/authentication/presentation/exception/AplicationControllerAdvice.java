@@ -45,4 +45,11 @@ public class AplicationControllerAdvice {
         return ex.getMessage();
     }
 
+    @ExceptionHandler(OperationNotCompleteException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    public String handleOperationNotCompleteException(OperationNotCompleteException ex) {
+        return ex.getMessage();
+    }
+
 }

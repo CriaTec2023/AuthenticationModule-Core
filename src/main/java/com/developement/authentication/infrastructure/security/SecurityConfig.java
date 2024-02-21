@@ -1,7 +1,6 @@
 package com.developement.authentication.infrastructure.security;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -29,13 +28,15 @@ public class SecurityConfig {
 
         return httpSecurity
                 .authorizeHttpRequests( authorize -> authorize
-                            .requestMatchers(HttpMethod.POST,"v2/auth/user/login").permitAll()
-                            .requestMatchers(HttpMethod.POST,"v2/auth/user/register").permitAll()
+                        .requestMatchers(HttpMethod.POST,"v2/auth/user/login").permitAll()
+                        .requestMatchers(HttpMethod.POST,"v2/auth/user/register").permitAll()
                         .requestMatchers(HttpMethod.GET,"v2/auth/users").permitAll()
-                            .requestMatchers("/v3/api-docs/**","/swagger-ui.html", "/swagger-ui/**").permitAll()
-                            .requestMatchers(HttpMethod.GET,"auth/make").permitAll()
-                            .requestMatchers(HttpMethod.GET,"v2/auth/validation").permitAll()
-                            .anyRequest().authenticated()
+                        .requestMatchers(HttpMethod.POST,"v2/auth/user/reset-password").authenticated()
+                        .requestMatchers(HttpMethod.POST,"v2/auth//user/reset-code").authenticated()
+                        .requestMatchers("/v3/api-docs/**","/swagger-ui.html", "/swagger-ui/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"auth/make").permitAll()
+                        .requestMatchers(HttpMethod.GET,"v2/auth/validation").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(crsf -> crsf.disable())

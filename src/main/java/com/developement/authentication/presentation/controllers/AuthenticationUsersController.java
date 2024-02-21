@@ -1,6 +1,7 @@
 package com.developement.authentication.presentation.controllers;
 
 import com.developement.authentication.application.dtos.*;
+import com.developement.authentication.domain.entity.ResetObject;
 import com.developement.authentication.domain.entity.UserModel;
 import com.developement.authentication.application.services.impl.TokenServiceImpl;
 import com.developement.authentication.application.services.impl.UsersServiceImpl;
@@ -123,4 +124,27 @@ public class AuthenticationUsersController {
     public ResponseEntity<?> getAllUsers(){
         return ResponseEntity.ok(usersService.findAll());
     }
+
+
+    @PostMapping("/user/reset-code")
+    public ResponseEntity<?> resetPassword(@RequestBody String email){
+        try {
+            ResetObject resetCode = tokenServiceImpl.generateResetObject(email);
+            return ResponseEntity.ok(new MessageDto("Success", resetCode.getResetToken()));
+        } catch (InvalidParamException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageDto("Error", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/user/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody String token, @RequestBody String newPassword){
+        try {
+            tokenServiceImpl.resetPassword(token, newPassword);
+            return ResponseEntity.ok(new MessageDto("Success", "Password reset successfully"));
+        } catch (InvalidParamException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageDto("Error", e.getMessage()));
+        }
+    }
+
+
 }

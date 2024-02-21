@@ -1,7 +1,6 @@
 package com.developement.authentication.domain.entity;
 
 import com.developement.authentication.application.enums.Roles;
-import com.developement.authentication.application.enums.Unidades;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -40,6 +39,8 @@ public class UserModel implements UserDetails {
     private boolean active = true;
     @Embedded
     private Acess acess ;
+    @Embedded
+    private ResetObject resetObject;
 
 
 

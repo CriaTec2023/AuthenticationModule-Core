@@ -32,7 +32,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"v2/auth/user/register").permitAll()
                         .requestMatchers(HttpMethod.GET,"v2/auth/users").permitAll()
                         .requestMatchers(HttpMethod.POST,"v2/auth/user/reset-password").authenticated()
-                        .requestMatchers(HttpMethod.POST,"v2/auth//user/reset-code").authenticated()
+                        .requestMatchers(HttpMethod.POST,"v2/auth/user/reset-code").authenticated()
                         .requestMatchers("/v3/api-docs/**","/swagger-ui.html", "/swagger-ui/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"auth/make").permitAll()
                         .requestMatchers(HttpMethod.GET,"v2/auth/validation").permitAll()

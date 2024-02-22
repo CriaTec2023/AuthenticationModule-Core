@@ -127,9 +127,9 @@ public class AuthenticationUsersController {
 
 
     @PostMapping("/user/reset-code")
-    public ResponseEntity<?> resetPassword(@RequestBody String email){
+    public ResponseEntity<?> resetPassword(@RequestBody EmailObjDto dto){
         try {
-            ResetObject resetCode = tokenServiceImpl.generateResetObject(email);
+            ResetObject resetCode = tokenServiceImpl.generateResetObject(dto.email());
             return ResponseEntity.ok(new MessageDto("Success", resetCode.getResetToken()));
         } catch (InvalidParamException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageDto("Error", e.getMessage()));
@@ -137,9 +137,9 @@ public class AuthenticationUsersController {
     }
 
     @PostMapping("/user/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestBody String token, @RequestBody String newPassword){
+    public ResponseEntity<?> resetPassword(@RequestBody EmailObjPasswordAndTokenDto dto){
         try {
-            tokenServiceImpl.resetPassword(token, newPassword);
+            tokenServiceImpl.resetPassword(dto.token(), dto.newPassword());
             return ResponseEntity.ok(new MessageDto("Success", "Password reset successfully"));
         } catch (InvalidParamException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageDto("Error", e.getMessage()));

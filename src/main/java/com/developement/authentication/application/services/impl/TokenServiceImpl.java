@@ -14,6 +14,7 @@ import com.developement.authentication.presentation.exception.InvalidParamExcept
 import com.developement.authentication.presentation.exception.OperationNotCompleteException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -118,7 +119,7 @@ public class TokenServiceImpl implements ITokenService {
                 () -> new InvalidParamException("Token inválido")
         );
         if(validateResetToken(token,user)){
-            user.setPassword(newPassword);
+            user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
             user.getResetObject().setResetTokenValid(false);
             user.getResetObject().setResetToken("");
             userPersistence.save(user);

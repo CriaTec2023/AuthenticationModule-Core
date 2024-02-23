@@ -96,7 +96,10 @@ public class TokenServiceImpl implements ITokenService {
             user.setResetObject(resetObject);
             userPersistence.save(user);
 
+
+
             return resetObject;
+
         }
         catch (OperationNotCompleteException e){
             throw new RuntimeException(e);

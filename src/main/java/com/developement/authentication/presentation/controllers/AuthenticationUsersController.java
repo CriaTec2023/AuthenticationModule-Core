@@ -1,6 +1,7 @@
 package com.developement.authentication.presentation.controllers;
 
 import com.developement.authentication.application.dtos.*;
+import com.developement.authentication.application.services.impl.EmailServiceImpl;
 import com.developement.authentication.domain.entity.ResetObject;
 import com.developement.authentication.domain.entity.UserModel;
 import com.developement.authentication.application.services.impl.TokenServiceImpl;
@@ -29,6 +30,7 @@ public class AuthenticationUsersController {
     private final TokenServiceImpl tokenServiceImpl;
     private final AuthenticationManager authenticationManager;
     private final UserPersistence repository;
+    private final EmailServiceImpl emailService;
 
 
 
@@ -130,7 +132,13 @@ public class AuthenticationUsersController {
     public ResponseEntity<?> resetPassword(@RequestBody EmailObjDto dto){
         try {
             ResetObject resetCode = tokenServiceImpl.generateResetObject(dto.email());
-            return ResponseEntity.ok(new MessageDto("Success", resetCode.getResetToken()));
+
+            ResponseDto emailResponse = emailService.sendEmail(EmailDto.builder()
+                    .emailTo(dto.email())
+                    .subject("Reset Password")
+                    .token(resetCode.getResetToken())
+                    .build());
+            return ResponseEntity.ok(new MessageDto("Success", emailResponse.message()));
         } catch (InvalidParamException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageDto("Error", e.getMessage()));
         }
@@ -138,13 +146,13 @@ public class AuthenticationUsersController {
 
     @PostMapping("/user/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody EmailObjPasswordAndTokenDto dto){
+        System.out.println(dto.token() + " " + dto.newPassword() + " " + dto.token());
         try {
             tokenServiceImpl.resetPassword(dto.token(), dto.newPassword());
-            return ResponseEntity.ok(new MessageDto("Success", "Password reset successfully"));
+            return ResponseEntity.ok(new MessageDto("Success", "Senha alterada com sucesso"));
         } catch (InvalidParamException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageDto("Error", e.getMessage()));
         }
     }
-
 
 }

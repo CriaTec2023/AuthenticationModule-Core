@@ -19,6 +19,10 @@ import com.developement.authentication.infrastructure.persistence.UserPersistenc
 import com.developement.authentication.presentation.exception.IncorrectPasswordException;
 import com.developement.authentication.presentation.exception.InvalidParamException;
 import com.developement.authentication.presentation.exception.UserAlreadyExistsException;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -72,8 +76,16 @@ public class AuthenticationUsersController {
 //        }
 //
 //    }
+@ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User logged in successfully", content =
+                { @Content(mediaType = "application/json", schema =
+                @Schema(implementation = ResponseSuccessLoginDto.class)
+                ) }),
+        @ApiResponse(responseCode = "401", description = "User or password not found", content =
+                { @Content(mediaType = "application/json", schema =
+                @Schema(implementation = ResponseLoginDto.class)) }) })
 
-    @PostMapping("/user/login")
+@PostMapping("/user/login")
     public ResponseEntity<?> login(@RequestBody @Valid UserLoginDto data){
 
         try {
@@ -97,10 +109,21 @@ public class AuthenticationUsersController {
         } catch (BadCredentialsException e) {
             String message = "Dados de usuário inválidos";
             var token = "";
-            return ResponseEntity.badRequest().body(new ResponseLoginDto(token, message));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseLoginDto(token, message));
         }
     }
-
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Usuário cadastrado com sucesso", content =
+                    { @Content(mediaType = "application/json", schema =
+                    @Schema(implementation = MessageDto.class)
+                    ) }),
+            @ApiResponse(responseCode = "409", description = "Usuário já cadastrado", content =
+                    { @Content(mediaType = "application/json", schema =
+                    @Schema(implementation = UserAlreadyExistsException.class))
+                    }),
+            @ApiResponse(responseCode = "500", description = "Ocorreu um erro ao processar a solicitação", content =
+                    { @Content(mediaType = "application/json", schema =
+                    @Schema(implementation = MessageDto.class)) })})
     @PostMapping("/user/register")
     public ResponseEntity<?> register(@RequestBody @Valid CreationUserDto user){
 
@@ -140,7 +163,18 @@ public class AuthenticationUsersController {
         return ResponseEntity.ok(usersService.findAll());
     }
 
-
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Email enviado com sucesso", content =
+                    { @Content(mediaType = "application/json", schema =
+                    @Schema(implementation = MessageDto.class)
+                    ) }),
+            @ApiResponse(responseCode = "409", description = "Erro ao enviar o email", content =
+                    { @Content(mediaType = "application/json", schema =
+                    @Schema(implementation = InvalidParamException.class))
+                    }),
+            @ApiResponse(responseCode = "500", description = "Ocorreu um erro ao processar a solicitação", content =
+                    { @Content(mediaType = "application/json", schema =
+                    @Schema(implementation = MessageDto.class)) })})
     @PostMapping("/user/reset-code")
     public ResponseEntity<?> resetPassword(@RequestBody EmailObjDto dto){
         try {
@@ -156,15 +190,22 @@ public class AuthenticationUsersController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageDto("Error", e.getMessage()));
         }
     }
-
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Senha alterada com sucesso", content =
+                    { @Content(mediaType = "application/json", schema =
+                    @Schema(implementation = MessageDto.class)
+                    ) }),
+            @ApiResponse(responseCode = "409", description = "Erro ao savar sua nova senha", content =
+                    { @Content(mediaType = "application/json", schema =
+                    @Schema(implementation = InvalidParamException.class))
+                    })})
     @PostMapping("/user/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody EmailObjPasswordAndTokenDto dto){
-        System.out.println(dto.token() + " " + dto.newPassword() + " " + dto.token());
         try {
             tokenServiceImpl.resetPassword(dto.token(), dto.newPassword());
             return ResponseEntity.ok(new MessageDto("Success", "Senha alterada com sucesso"));
         } catch (InvalidParamException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageDto("Error", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto("Error", e.getMessage()));
         }
     }
 

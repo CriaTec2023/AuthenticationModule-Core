@@ -25,7 +25,7 @@ public class AplicationControllerAdvice {
     }
 
     @ExceptionHandler(InvalidParamException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     @ResponseBody
     public String handleInvalidParamException(InvalidParamException ex) {
         return ex.getMessage();
@@ -52,4 +52,10 @@ public class AplicationControllerAdvice {
         return ex.getMessage();
     }
 
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public String handleUserAlreadyExistsException(UserAlreadyExistsException ex) {
+        return ex.getMessage();
+    }
 }

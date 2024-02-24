@@ -22,7 +22,7 @@ Faça o download da aplicação e abra na IDE de sua preferência, para melhor d
 
 ContentModule-CollaboratorSpace - Vá em "ContentModule-CollaboratorSpace/src/main/java/com/content/module" e rode a aplicação em "ModuleApplication.java".
 
-AuthenticationModule-Core - Vá em "AuthenticationModule-Core/src/test/java/com/developement/authentication
+AuthenticationModule-Core - Vá em "AuthenticationModule-Core/src/main/java/com/developement/authentication
 /" e rode a aplicação em "AuthApplication.java".
 
 Rode `ng build` para fazer a build do projeto. O artefato da build vai estar no `dist/collaborator-module` diretótiro.

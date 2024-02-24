@@ -22,8 +22,8 @@ Faça o download da aplicação e abra na IDE de sua preferência, para melhor d
 
 ContentModule-CollaboratorSpace - Vá em "ContentModule-CollaboratorSpace/src/main/java/com/content/module" e rode a aplicação em "ModuleApplication.java".
 
-ContentModule-CollaboratorSpace - Vá em "AuthenticationModule-CollaboratorSpace/src/main/java/com/developement/crm
-/" e rode a aplicação em "BackEndCrmApplication.java".
+AuthenticationModule-Core - Vá em "AuthenticationModule-CollaboratorSpace/src/main/java/com/developement/crm
+/" e rode a aplicação em "AuthApplication.java".
 
 Rode `ng build` para fazer a build do projeto. O artefato da build vai estar no `dist/collaborator-module` diretótiro.
 
@@ -65,6 +65,10 @@ A aplicação permite a validação de tokens de autenticação para garantir a 
 ### Serviço de Autenticação Personalizado
 
 A aplicação inclui um serviço de autenticação personalizado para carregar detalhes do usuário com base no nome de usuário (login)
+
+### Serviço de Reset de senha
+
+A aplicação inclui um serviço de reset de senha com geração de um token com validade enviado para o email previamente cadrastrato e um end-point para de fato alterar a senha usando esse token
 
 ##  Modulo de Eventos
 

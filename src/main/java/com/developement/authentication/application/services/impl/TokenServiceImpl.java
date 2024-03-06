@@ -12,11 +12,11 @@ import com.developement.authentication.domain.entity.UserModel;
 import com.developement.authentication.infrastructure.persistence.UserPersistence;
 import com.developement.authentication.presentation.exception.InvalidParamException;
 import com.developement.authentication.presentation.exception.OperationNotCompleteException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -26,6 +26,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class TokenServiceImpl implements ITokenService {
@@ -115,7 +116,6 @@ public class TokenServiceImpl implements ITokenService {
     }
 
     @Override
-    @Transactional
     public boolean resetPassword(String token, String newPassword) {
 
         UserModel user = userPersistence.findUserModelByResetObjectResetToken(token).orElseThrow(
@@ -131,8 +131,8 @@ public class TokenServiceImpl implements ITokenService {
         return false;
 
     }
-
-    private String generateToken(){
+    @Override
+    public String generateToken(){
         int length = 6;
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         StringBuilder code = new StringBuilder();

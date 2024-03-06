@@ -10,6 +10,7 @@ import com.developement.authentication.presentation.exception.InvalidParamExcept
 import com.developement.authentication.presentation.exception.ResourceNotFoundException;
 import com.developement.authentication.domain.entity.UserModel;
 import com.developement.authentication.presentation.mapper.FromDto;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class UsersServiceImpl implements IUserService {

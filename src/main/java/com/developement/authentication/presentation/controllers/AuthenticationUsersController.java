@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("v2/auth")
+@RequestMapping("/v2/auth")
 public class AuthenticationUsersController {
 
     private final UsersServiceImpl usersService;

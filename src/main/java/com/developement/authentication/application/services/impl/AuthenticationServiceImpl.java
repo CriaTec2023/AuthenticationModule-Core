@@ -2,6 +2,7 @@ package com.developement.authentication.application.services.impl;
 
 import com.auth0.jwt.JWT;
 import com.developement.authentication.infrastructure.persistence.UserPersistence;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class AuthenticationServiceImpl implements UserDetailsService {
 
     private final UserPersistence repository ;
@@ -35,7 +37,6 @@ public class AuthenticationServiceImpl implements UserDetailsService {
 
     public static String getUserbyToken(String token) {
         return JWT.decode(token).getSubject();
-
     }
 }
 

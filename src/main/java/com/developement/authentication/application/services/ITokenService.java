@@ -19,4 +19,6 @@ public interface ITokenService {
      boolean validateResetToken(String token, UserModel user);
 
     boolean resetPassword(String token, String newPassword);
+
+    String generateToken();
 }

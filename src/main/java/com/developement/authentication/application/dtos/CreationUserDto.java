@@ -10,7 +10,5 @@ public record CreationUserDto(
     Acess acessInfo,
     String role
 
-
-
 ) {
 }

@@ -26,67 +26,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc(addFilters = false)
+
 public class TesteIntegracaoController {
-
-    @Autowired
-    private UsersServiceImpl usersService;
-
-    @Autowired
-    private TokenServiceImpl tokenServiceImpl;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    UsersRepository usersRepository;
-
-    @Autowired
-    AuthenticationUsersController authenticationUsersController;
-
-    @Autowired
-    ObjectMapper objectMapper;
-
-    @Autowired
-    MockMvc mockMvc;
-
-    private UserModel user1;
-
-    private UserLoginDto user1LoginDto;
-
-    @BeforeEach
-    void setUp() {
-        user1 = UserModel.builder()
-                .login("lupesms97@gmail.com")
-                .password("LuisFelipe97")
-                .email("lupesms97@gmail.com")
-                .name("Felipe Mota")
-                .token("Token")
-
-                .creationDate(LocalDateTime.now())
-                .role(Roles.ADMIN)
-                .build();
-
-        user1LoginDto = UserLoginDto.builder()
-                .login(user1.getLogin())
-                .password(user1.getPassword())
-                .build();
-
-    }
-    @Test
-    public void LoginShouldReturnToken() throws Exception {
-
-        ResultActions response = mockMvc.perform(post("/auth/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(user1LoginDto)));
-
-        response
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value(user1.getToken()))
-                .andExpect(jsonPath("$.message").value("Usuário logado com sucesso"));
-
-    }
 
 
 

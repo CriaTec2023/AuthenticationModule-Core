@@ -1,12 +1,16 @@
-FROM maven:3.8.2-amazoncorretto-17 AS build
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-ADD . /usr/src/app
-RUN mvn clean package -DskipTests
+FROM ubuntu:latest AS build
 
-FROM amazoncorretto:17
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+RUN apt-get update
+RUN apt-get install openjdk-17-jdk -y
+COPY . .
+
+RUN apt-get install maven -y
+RUN mvn clean install
+
+FROM openjdk:17-jdk-slim
+
+EXPOSE 8080
+
 COPY --from=build /usr/src/app/target/*.jar app.jar
 CMD ["java", "-jar", "app.jar"]
 

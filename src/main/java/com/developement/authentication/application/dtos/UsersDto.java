@@ -25,7 +25,6 @@ public class UsersDto {
     private String password;
     private String name;
     private Unidades unidade;
-
     private Roles role;
 
 

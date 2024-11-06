@@ -67,7 +67,6 @@ public class UsersServiceImpl implements IUserService {
 
     @Override
     public UserModel findUserByLogin(final String login){
-
         return userPersistence.findUserModelByLogin(login).orElseThrow(
                 () -> new ResourceNotFoundException("Usuário não encontrado")
         );

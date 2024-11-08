@@ -1,16 +1,14 @@
 package com.developement.authentication.presentation.controllers;
 
 import com.developement.authentication.application.dtos.MessageDto;
+import com.developement.authentication.application.dtos.UserUpdateDto;
 import com.developement.authentication.application.services.IUserService;
 import com.developement.authentication.application.services.impl.UsersServiceImpl;
 import com.developement.authentication.domain.entity.UserModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -33,4 +31,26 @@ public class UsersApi {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageDto("Erro", e.getMessage()));
         }
     }
+
+    @DeleteMapping("/user/delete?{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable("id") String id ) {
+        try {
+            usersService.deleteUser(id);
+            return ResponseEntity.status(HttpStatus.OK).body(new MessageDto("Sucesso", "Usuário deletado"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageDto("Erro", e.getMessage()));
+        }
+    }
+
+    @PutMapping("/user/update/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable("id") String id, @RequestBody UserUpdateDto user) {
+        try {
+            usersService.updateUser(id, user);
+            return ResponseEntity.status(HttpStatus.OK).body(new MessageDto("Sucesso", "Usuário atualizado"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageDto("Erro", e.getMessage()));
+        }
+    }
+
+
 }

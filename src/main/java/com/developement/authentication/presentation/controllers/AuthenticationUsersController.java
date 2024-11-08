@@ -139,9 +139,9 @@ public class AuthenticationUsersController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageDto("Erro", "Ocorreu um erro ao processar a solicitação"));
         }
-
-
     }
+
+
 
 
     @GetMapping("/validation")

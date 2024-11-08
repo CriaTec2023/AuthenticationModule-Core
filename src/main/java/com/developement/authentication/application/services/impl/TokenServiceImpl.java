@@ -44,6 +44,7 @@ public class TokenServiceImpl implements ITokenService {
                     .withSubject(user.email())
                     .withClaim("roles",user.role())
                     .withClaim("name",user.name())
+                    .withClaim("email",user.email())
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException exception) {
